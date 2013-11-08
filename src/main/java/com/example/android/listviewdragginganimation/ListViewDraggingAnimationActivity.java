@@ -30,7 +30,7 @@ import java.util.ArrayList;
  * moved around by tracking and following the movement of the user's finger.
  * When the item is released, it animates to its new position within the listview.
  */
-public class ListViewDraggingAnimation extends Activity {
+public class ListViewDraggingAnimationActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
