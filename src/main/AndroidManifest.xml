@@ -22,5 +22,8 @@
         <activity
                 android:name=".ListViewDraggingAnimationActivity"
                 android:label="@string/app_name"/>
+        <activity
+                android:name=".GridViewDraggingAnimationActivity"
+                android:label="@string/app_name"/>
     </application>
 </manifest>
