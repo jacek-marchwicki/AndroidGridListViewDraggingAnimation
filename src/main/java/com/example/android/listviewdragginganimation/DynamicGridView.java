@@ -110,6 +110,14 @@ public class DynamicGridView extends GridView {
         init(context);
     }
 
+    @Override
+    public void setAdapter(ListAdapter adapter) {
+        if (!(adapter instanceof DraggableAdapter)) {
+            throw new IllegalArgumentException("Adapter have to implement DraggableAdapter");
+        }
+        super.setAdapter(adapter);
+    }
+
     public void init(Context context) {
         setOnItemLongClickListener(mOnItemLongClickListener);
         setOnScrollListener(mScrollListener);

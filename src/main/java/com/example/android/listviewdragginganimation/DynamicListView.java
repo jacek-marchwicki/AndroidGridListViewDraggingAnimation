@@ -35,6 +35,7 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 
 /**
@@ -103,6 +104,14 @@ public class DynamicListView extends ListView {
     public DynamicListView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context);
+    }
+
+    @Override
+    public void setAdapter(ListAdapter adapter) {
+        if (!(adapter instanceof DraggableAdapter)) {
+            throw new IllegalArgumentException("Adapter have to implement DraggableAdapter");
+        }
+        super.setAdapter(adapter);
     }
 
     public void init(Context context) {
