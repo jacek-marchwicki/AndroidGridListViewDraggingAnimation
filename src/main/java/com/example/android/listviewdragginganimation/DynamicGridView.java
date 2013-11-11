@@ -43,7 +43,7 @@ import android.widget.ListAdapter;
 import java.util.HashMap;
 
 /**
- * The dynamic listview is an extension of listview that supports cell dragging
+ * The dynamic gridview is an extension of gridview that supports cell dragging
  * and swapping.
  *
  * This layout is in charge of positioning the hover cell in the correct location
@@ -51,17 +51,17 @@ import java.util.HashMap;
  * hover cell to determine when two cells should be swapped. If two cells should
  * be swapped, all the corresponding data set and layout changes are handled here.
  *
- * If no cell is selected, all the touch events are passed down to the listview
- * and behave normally. If one of the items in the listview experiences a
+ * If no cell is selected, all the touch events are passed down to the gridview
+ * and behave normally. If one of the items in the gridview experiences a
  * long press event, the contents of its current visible state are captured as
  * a bitmap and its visibility is set to INVISIBLE. A hover cell is then created and
- * added to this layout as an overlaying BitmapDrawable above the listview. Once the
+ * added to this layout as an overlaying BitmapDrawable above the gridview. Once the
  * hover cell is translated some distance to signify an item swap, a data set change
  * accompanied by animation takes place. When the user releases the hover cell,
- * it animates into its corresponding position in the listview.
+ * it animates into its corresponding position in the gridview.
  *
- * When the hover cell is either above or below the bounds of the listview, this
- * listview also scrolls on its own so as to reveal additional content.
+ * When the hover cell is either above or below the bounds of the gridview, this
+ * gridview also scrolls on its own so as to reveal additional content.
  */
 public class DynamicGridView extends GridView {
 
@@ -227,7 +227,7 @@ public class DynamicGridView extends GridView {
     /**
      *  dispatchDraw gets invoked when all the child views are about to be drawn.
      *  By overriding this method, the hover cell (BitmapDrawable) can be drawn
-     *  over the listview's items whenever the listview is redrawn.
+     *  over the gridview's items whenever the gridview is redrawn.
      */
     @Override
     protected void dispatchDraw(Canvas canvas) {
@@ -282,7 +282,7 @@ public class DynamicGridView extends GridView {
                 /* If a multitouch event took place and the original touch dictating
                  * the movement of the hover cell has ended, then the dragging event
                  * ends and the hover cell is animated to its corresponding position
-                 * in the listview. */
+                 * in the gridview. */
                 pointerIndex = (event.getAction() & MotionEvent.ACTION_POINTER_INDEX_MASK) >>
                         MotionEvent.ACTION_POINTER_INDEX_SHIFT;
                 final int pointerId = event.getPointerId(pointerIndex);
@@ -517,8 +517,8 @@ public class DynamicGridView extends GridView {
     };
 
     /**
-     *  Determines whether this listview is in a scrolling state invoked
-     *  by the fact that the hover cell is out of the bounds of the listview;
+     *  Determines whether this gridview is in a scrolling state invoked
+     *  by the fact that the hover cell is out of the bounds of the gridview;
      */
     private void handleMobileCellScroll() {
         mIsMobileScrolling = handleMobileCellScroll(mHoverCellCurrentBounds);
@@ -526,7 +526,7 @@ public class DynamicGridView extends GridView {
 
     /**
      * This method is in charge of determining if the hover cell is above
-     * or below the bounds of the listview. If so, the listview does an appropriate
+     * or below the bounds of the gridview. If so, the gridview does an appropriate
      * upward or downward smooth scroll so as to reveal new items.
      */
     public boolean handleMobileCellScroll(Rect r) {
@@ -551,10 +551,10 @@ public class DynamicGridView extends GridView {
     }
 
     /**
-     * This scroll listener is added to the listview in order to handle cell swapping
-     * when the cell is either at the top or bottom edge of the listview. If the hover
-     * cell is at either edge of the listview, the listview will begin scrolling. As
-     * scrolling takes place, the listview continuously checks if new cells became visible
+     * This scroll listener is added to the gridview in order to handle cell swapping
+     * when the cell is either at the top or bottom edge of the gridview. If the hover
+     * cell is at either edge of the gridview, the gridview will begin scrolling. As
+     * scrolling takes place, the gridview continuously checks if new cells became visible
      * and determines whether they are potential candidates for a cell swap.
      */
     private OnScrollListener mScrollListener = new OnScrollListener () {
@@ -590,11 +590,11 @@ public class DynamicGridView extends GridView {
         }
 
         /**
-         * This method is in charge of invoking 1 of 2 actions. Firstly, if the listview
+         * This method is in charge of invoking 1 of 2 actions. Firstly, if the gridview
          * is in a state of scrolling invoked by the hover cell being outside the bounds
-         * of the listview, then this scrolling event is continued. Secondly, if the hover
+         * of the gridview, then this scrolling event is continued. Secondly, if the hover
          * cell has already been released, this invokes the animation for the hover cell
-         * to return to its correct position after the listview has entered an idle scroll
+         * to return to its correct position after the gridview has entered an idle scroll
          * state.
          */
         private void isScrollCompleted() {
@@ -608,7 +608,7 @@ public class DynamicGridView extends GridView {
         }
 
         /**
-         * Determines if the listview scrolled up enough to reveal a new cell at the
+         * Determines if the gridview scrolled up enough to reveal a new cell at the
          * top of the list. If so, then the appropriate parameters are updated.
          */
         public void checkAndHandleFirstVisibleCellChange() {
@@ -620,7 +620,7 @@ public class DynamicGridView extends GridView {
         }
 
         /**
-         * Determines if the listview scrolled down enough to reveal a new cell at the
+         * Determines if the gridview scrolled down enough to reveal a new cell at the
          * bottom of the list. If so, then the appropriate parameters are updated.
          */
         public void checkAndHandleLastVisibleCellChange() {
