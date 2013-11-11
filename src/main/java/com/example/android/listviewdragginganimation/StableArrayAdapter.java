@@ -18,18 +18,22 @@ package com.example.android.listviewdragginganimation;
 
 import android.content.Context;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class StableArrayAdapter extends ArrayAdapter<String> {
+public class StableArrayAdapter extends ArrayAdapter<String> implements DraggableAdapter {
 
     final int INVALID_ID = -1;
 
+    private final List<String> mObjects;
     HashMap<String, Integer> mIdMap = new HashMap<String, Integer>();
 
     public StableArrayAdapter(Context context, int textViewResourceId, List<String> objects) {
         super(context, textViewResourceId, objects);
+        mObjects = objects;
         for (int i = 0; i < objects.size(); ++i) {
             mIdMap.put(objects.get(i), i);
         }
@@ -47,5 +51,29 @@ public class StableArrayAdapter extends ArrayAdapter<String> {
     @Override
     public boolean hasStableIds() {
         return true;
+    }
+
+    @Override
+    public void reorderElements(int position, int newPosition) {
+        final List<String> objects = mObjects;
+
+        String previous = objects.get(position);
+        int iterator = newPosition < position ? 1 : -1;
+        final int afterPosition = position + iterator;
+        for (int cellPosition = newPosition; cellPosition != afterPosition; cellPosition += iterator) {
+            String tmp = objects.get(cellPosition);
+            objects.set(cellPosition, previous);
+            previous = tmp;
+        }
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public void swapElements(int position, int newPosition) {
+        final List<String> objects = mObjects;
+        String temp = objects.get(position);
+        objects.set(position, objects.get(newPosition));
+        objects.set(newPosition, temp);
+        notifyDataSetChanged();
     }
 }

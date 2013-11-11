@@ -28,7 +28,6 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.util.AttributeSet;
@@ -38,10 +37,9 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.BaseAdapter;
 import android.widget.GridView;
+import android.widget.ListAdapter;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -70,8 +68,6 @@ public class DynamicGridView extends GridView {
     private final int SMOOTH_SCROLL_AMOUNT_AT_EDGE = 15;
     private final int MOVE_DURATION = 150;
     private final int LINE_THICKNESS = 15;
-
-    public ArrayList<String> mCheeseList;
 
     private int mLastEventX = -1;
     private int mLastEventY = -1;
@@ -304,64 +300,6 @@ public class DynamicGridView extends GridView {
     private HashMap<Long, Integer> mItemIdTops = new HashMap<Long, Integer>();
     private HashMap<Long, Integer> mItemIdLefts = new HashMap<Long, Integer>();
 
-    private void swapper(final View view) {
-        if (view == null) {
-            return;
-        }
-        view.setVisibility(View.VISIBLE);
-        final int oldX = view.getLeft();
-        final int oldY = view.getTop();
-
-        final ViewTreeObserver observer = getViewTreeObserver();
-        assert observer != null;
-        observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                observer.removeGlobalOnLayoutListener(this);
-//                observer.removeOnPreDrawListener(this);
-
-                final int newX = view.getLeft();
-                final int newY = view.getTop();
-
-                int deltaX = oldX - newX;
-                int deltaY = oldY - newY;
-
-                view.setTranslationX(deltaX);
-                view.setTranslationY(deltaY);
-
-                final AnimatorSet animator = new AnimatorSet();
-                animator.playTogether(
-                        ObjectAnimator.ofFloat(view, View.TRANSLATION_X, 0),
-                        ObjectAnimator.ofFloat(view, View.TRANSLATION_Y, 0)
-                );
-                animator.setDuration(MOVE_DURATION).start();
-
-            }
-        });
-//        observer.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-//            public boolean onPreDraw() {
-//                observer.removeOnPreDrawListener(this);
-//
-//                final int newX = view.getLeft();
-//                final int newY = view.getTop();
-//
-//                int deltaX = oldX - newX;
-//                int deltaY = oldY - newY;
-//
-//                view.setTranslationX(deltaX);
-//                view.setTranslationY(deltaY);
-//
-//                final AnimatorSet animator = new AnimatorSet();
-//                animator.playTogether(
-//                        ObjectAnimator.ofFloat(view, View.TRANSLATION_X, 0),
-//                        ObjectAnimator.ofFloat(view, View.TRANSLATION_Y, 0)
-//                );
-//                animator.setDuration(MOVE_DURATION).start();
-//                return true;
-//            }
-//        });
-    }
-
     /**
      * This method determines whether the hover cell has been shifted far enough
      * to invoke a cell swap. If so, then the respective cell swap candidate is
@@ -421,12 +359,11 @@ public class DynamicGridView extends GridView {
             return;
         }
 
-        final StableArrayAdapter adapter = ((StableArrayAdapter) getAdapter());
+        final ListAdapter adapter = getAdapter();
         final int fromPosition = Math.min(newPosition, position);
         final int toPosition = Math.max(newPosition, position);
 
         for (int cellPosition = fromPosition; cellPosition <= toPosition; cellPosition ++) {
-//            swapper(getViewForPosition(cellPosition));
             getViewForPosition(cellPosition).setVisibility(View.VISIBLE);
         }
         mItemIdLefts.clear();
@@ -491,22 +428,7 @@ public class DynamicGridView extends GridView {
             }
         });
 
-        swapElements(position, newPosition);
-
-        adapter.notifyDataSetChanged();
-    }
-
-    private void swapElements(int position, int newPosition) {
-        final ArrayList<String> cheeseList = mCheeseList;
-
-        String previous = cheeseList.get(position);
-        int iterator = newPosition < position ? 1 : -1;
-        final int afterPosition = position + iterator;
-        for (int cellPosition = newPosition; cellPosition != afterPosition; cellPosition += iterator) {
-            String tmp = cheeseList.get(cellPosition);
-            cheeseList.set(cellPosition, previous);
-            previous = tmp;
-        }
+        ((DraggableAdapter) adapter).reorderElements(position, newPosition);
     }
 
     /**
@@ -626,10 +548,6 @@ public class DynamicGridView extends GridView {
         }
 
         return false;
-    }
-
-    public void setCheeseList(ArrayList<String> cheeseList) {
-        mCheeseList = cheeseList;
     }
 
     /**

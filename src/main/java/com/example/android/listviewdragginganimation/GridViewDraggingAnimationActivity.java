@@ -46,7 +46,6 @@ public class GridViewDraggingAnimationActivity extends Activity {
         StableArrayAdapter adapter = new StableArrayAdapter(this, R.layout.text_view, mCheeseList);
         DynamicGridView gridView = (DynamicGridView) findViewById(R.id.gridview);
 
-        gridView.setCheeseList(mCheeseList);
         gridView.setAdapter(adapter);
         gridView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
     }

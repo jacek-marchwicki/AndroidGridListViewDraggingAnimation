@@ -35,10 +35,7 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.BaseAdapter;
 import android.widget.ListView;
-
-import java.util.ArrayList;
 
 /**
  * The dynamic listview is an extension of listview that supports cell dragging
@@ -66,8 +63,6 @@ public class DynamicListView extends ListView {
     private final int SMOOTH_SCROLL_AMOUNT_AT_EDGE = 15;
     private final int MOVE_DURATION = 150;
     private final int LINE_THICKNESS = 15;
-
-    public ArrayList<String> mCheeseList;
 
     private int mLastEventY = -1;
 
@@ -332,9 +327,8 @@ public class DynamicListView extends ListView {
                 return;
             }
 
-            swapElements(mCheeseList, originalItem, getPositionForView(switchView));
-
-            ((BaseAdapter) getAdapter()).notifyDataSetChanged();
+            final int newItemPosition = getPositionForID(switchItemID);
+            ((DraggableAdapter)getAdapter()).swapElements(originalItem, newItemPosition);
 
             mDownY = mLastEventY;
 
@@ -369,13 +363,6 @@ public class DynamicListView extends ListView {
             });
         }
     }
-
-    private void swapElements(ArrayList arrayList, int indexOne, int indexTwo) {
-        Object temp = arrayList.get(indexOne);
-        arrayList.set(indexOne, arrayList.get(indexTwo));
-        arrayList.set(indexTwo, temp);
-    }
-
 
     /**
      * Resets all the appropriate fields to a default state while also animating
@@ -498,10 +485,6 @@ public class DynamicListView extends ListView {
         }
 
         return false;
-    }
-
-    public void setCheeseList(ArrayList<String> cheeseList) {
-        mCheeseList = cheeseList;
     }
 
     /**

@@ -45,7 +45,6 @@ public class ListViewDraggingAnimationActivity extends Activity {
         StableArrayAdapter adapter = new StableArrayAdapter(this, R.layout.text_view, mCheeseList);
         DynamicListView listView = (DynamicListView) findViewById(R.id.listview);
 
-        listView.setCheeseList(mCheeseList);
         listView.setAdapter(adapter);
         listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
     }
