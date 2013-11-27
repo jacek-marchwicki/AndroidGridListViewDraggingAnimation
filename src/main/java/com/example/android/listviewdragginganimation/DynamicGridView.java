@@ -334,7 +334,7 @@ public class DynamicGridView extends GridView {
         View aboveView = getViewForPosition(abovePosition);
         View belowView = getViewForPosition(belowPosition);
         View toLeftView = getViewForPosition(toLeftPosition);
-        View toRightView = getViewForID(toRightPosition);
+        View toRightView = getViewForPosition(toRightPosition);
         View mobileView = getViewForID(mMobileItemId);
 
         if ((toRightView != null) && (mobileView.getLeft() > toRightView.getLeft())) {
